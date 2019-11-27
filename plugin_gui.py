@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import subprocess
+import sys
+
 try:
 	# Python 2
 	import Tkinter as tk
@@ -60,7 +62,7 @@ class PluginGui:
 		self.clear['state'] = 'normal' if self._route.len() > 0 else 'disabled'
 		self._to_clipboard()
 
-	def _to_clipboard(self):
+	def _to_clipboard(self, event = None):
 		if self._route.len() == 0:
 			return
 
