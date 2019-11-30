@@ -6,12 +6,11 @@ import os
 class Waypoints:
 
 	def __init__(self, plugin_dir):
-		self._save_file = os.path.join(plugin_dir, 'route.txt')
-		self.clear()
-#		try:
-#			self.readfile(self.save_file)
-#		except:
-#			# no saved route
+		self._route = []
+		self._index = 0
+
+		self._save_route = os.path.join(plugin_dir, 'save_route.txt')
+		self._save_index = os.path.join(plugin_dir, 'save_index.txt')
 
 	def clear(self):
 		self._route = []
@@ -47,16 +46,24 @@ class Waypoints:
 		self.next()
 		return True
 
-	# todo error handling!
-	def load_file(self, filename):
+	def load(self, filename):
 		if filename.__len__() == 0: return False
-		self.clear()
-		with open(filename, 'r') as f:
-			for line in f:
-				s = line.rstrip(' \r\n').replace('|',',').split(',')[0]
-				if s == 'System Name':
-					continue
+		if not os.path.isfile(filename): return False
 
-				self._route.append(s)
+		self._route = []
+		self._index = 0
+		try:
+			with open(filename, 'r') as f:
+				for line in f:
+					s = line.rstrip(' \r\n').replace('|',',').split(',')[0]
+					if s == 'System Name':
+						continue
+
+					self._route.append(s)
+		except IOError:
+			print "Failed to read file {}".format(filename)
+			self._route = []
+			return False
+
 		return True
 

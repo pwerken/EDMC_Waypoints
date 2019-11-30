@@ -93,7 +93,7 @@ class PluginGui:
 			('Text files', '*.txt'),
 		]
 		filename = filedialog.askopenfilename(filetypes = ftypes)
-		if self._route.load_file(filename):
+		if self._route.load(filename):
 			self.update_UI()
 
 	def _clear_route(self):
