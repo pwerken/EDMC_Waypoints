@@ -13,6 +13,9 @@ this.route = None
 def plugin_start(plugin_dir):
 	this.route = Waypoints(plugin_dir)
 
+def plugin_stop():
+	this.route.save()
+
 def plugin_app(parent):
 	this.gui = PluginGui(parent, this.route)
 

@@ -12,9 +12,17 @@ class Waypoints:
 		self._save_route = os.path.join(plugin_dir, 'save_route.txt')
 		self._save_index = os.path.join(plugin_dir, 'save_index.txt')
 
+		if self.load(self._save_route):
+			self._load_index()
+
 	def clear(self):
 		self._route = []
 		self._index = 0
+
+		if os.path.isfile(self._save_route):
+			os.remove(self._save_route)
+		if os.path.isfile(self._save_index):
+			os.remove(self._save_index)
 
 	def len(self):
 		return self._route.__len__()
@@ -67,3 +75,23 @@ class Waypoints:
 
 		return True
 
+	def _load_index(self):
+		try:
+			with open(self._save_index, 'r') as f:
+				self._index = int(f.readline())
+		except IOError:
+			print "Failed to read saved route index"
+
+	def save(self):
+		try:
+			with open(self._save_route, 'w') as f:
+				f.write('System Name\n')
+				for s in self._route:
+					f.write(s)
+					f.write('\n')
+
+			with open(self._save_index, 'w') as f:
+				f.write(str(self._index))
+				f.write('\n')
+		except IOError:
+			print "Failed to save current route"

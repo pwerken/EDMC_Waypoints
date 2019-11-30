@@ -1,2 +1,5 @@
 *.pyc
 *.pyo
+
+save_route.txt
+save_index.txt
