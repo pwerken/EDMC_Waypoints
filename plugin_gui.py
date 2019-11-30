@@ -38,7 +38,7 @@ class PluginGui:
 		frame.columnconfigure(1, weight=1)
 
 		self.prev   = tk.Button(frame, text=[u'\u2190'], command=self._prev_wp)
-		self.status	= tk.Label(frame, text='-\n-')
+		self.status	= tk.Label(frame, text='-\n-', justify=tk.RIGHT)
 		self.next   = tk.Button(frame, text=[u'\u2192'], command=self._next_wp)
 #		self.ff     = tk.Button(frame, text=[u'\u21A0'], command=skip_forward)
 		self.clear  = tk.Button(frame, text='X', command=self._clear_route)
