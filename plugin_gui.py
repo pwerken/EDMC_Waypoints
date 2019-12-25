@@ -66,13 +66,13 @@ class PluginGui:
 		if self._route.len() == 0:
 			return
 
-		t = self._route.target()
+		target = self._route.target()
 		if sys.platform == "linux" or sys.platform == "linux2":
-			command = subprocess.Popen(["echo", "-n", t], stdout=subprocess.PIPE)
-			subprocess.Popen(["xclip", "-selection", "c"], stdin=command.stdout)
+			command = subprocess.Popen(["echo", "-n", target], stdout=subprocess.PIPE)
+			subprocess.call(["xclip", "-selection", "c"], stdin=command.stdout)
 		else:
 			self.parent.clipboard_clear()
-			self.parent.clipboard_append(t)
+			self.parent.clipboard_append(target)
 			self.parent.update()
 
 	def _next_wp(self):
