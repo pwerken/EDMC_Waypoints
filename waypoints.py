@@ -42,11 +42,13 @@ class Waypoints:
 	def next(self):
 		if not self.has_next(): return False
 		self._index += 1
+		self.save()
 		return True
 
 	def prev(self):
 		if not self.has_prev(): return False
 		self._index -= 1
+		self.save()
 		return True
 
 	def reached(self, system):
