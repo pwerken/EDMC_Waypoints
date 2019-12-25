@@ -22,7 +22,7 @@ class PluginGui:
 	def __init__(self, parent, route):
 		self._route = route
 
-		tk.Frame(parent, highlightthickness=1).grid(columnspan=2, sticky=tk.EW)	# separator
+		tk.Frame(parent, highlightthickness=1).grid(columnspan=2, sticky=tk.EW)
 		row = parent.grid_size()[1]
 		wp_label = tk.Label(parent)
 		wp_label.grid(row=row, column=0, sticky=tk.W)
@@ -35,10 +35,10 @@ class PluginGui:
 
 		frame = tk.Frame(parent)
 		frame.grid(columnspan=2, sticky=tk.NSEW)
-		frame.columnconfigure(1, weight=1)
+		frame.columnconfigure(2, weight=1)
 
 		self.prev   = tk.Button(frame, text=[u'\u2190'], command=self._prev_wp)
-		self.status	= tk.Label(frame, text='-\n-', justify=tk.RIGHT)
+		self.status	= tk.Label(frame, text='- / -', justify=tk.CENTER)
 		self.next   = tk.Button(frame, text=[u'\u2192'], command=self._next_wp)
 #		self.ff     = tk.Button(frame, text=[u'\u21A0'], command=skip_forward)
 		self.clear  = tk.Button(frame, text='X', command=self._clear_route)
@@ -56,7 +56,7 @@ class PluginGui:
 	def update_UI(self):
 		self.target['text'] = self._route.target()
 		self.prev['state']  = 'normal' if self._route.has_prev() else 'disabled'
-		self.status['text'] = '{}\n{}'.format(self._route.pos(), self._route.len())
+		self.status['text'] = '{} / {}'.format(self._route.pos(), self._route.len())
 		self.next['state']  = 'normal' if self._route.has_next() else 'disabled'
 #		self.ff['state']    = 'normal' if False else 'disabled'
 		self.clear['state'] = 'normal' if self._route.len() > 0 else 'disabled'
