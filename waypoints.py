@@ -6,6 +6,7 @@ class Waypoints:
 
 	def __init__(self, plugin_dir):
 		self._route = []
+		self._notes = []
 		self._index = 0
 
 		self._save_route = os.path.join(plugin_dir, 'save_route.txt')
@@ -16,6 +17,7 @@ class Waypoints:
 
 	def clear(self):
 		self._route = []
+		self._notes = []
 		self._index = 0
 
 		if os.path.isfile(self._save_route):
@@ -31,6 +33,9 @@ class Waypoints:
 
 	def target(self):
 		return '' if self.len() == 0 else self._route[self._index]
+
+	def note(self):
+		return '' if self.len() == 0 else self._notes[self._index]
 
 	def has_next(self):
 		return self._index + 1 < self.len()
@@ -51,7 +56,9 @@ class Waypoints:
 		return True
 
 	def reached(self, system):
-		if system.lower() != self.target().lower(): return False
+		if system.lower() != self.target().lower():
+			return False
+
 		self.next()
 		return True
 
@@ -60,15 +67,20 @@ class Waypoints:
 		if not os.path.isfile(filename): return False
 
 		self._route = []
+		self._notes = []
 		self._index = 0
 		try:
 			with open(filename, 'r') as f:
 				for line in f:
-					s = line.rstrip(' \r\n').replace('|',',').split(',')[0]
-					if s == 'System Name':
+					s = line.rstrip(' \r\n').replace('|',',').split(',')
+					if s[0] == 'System Name':
 						continue
 
-					self._route.append(s)
+					self._route.append(s[0])
+					if len(s) > 1:
+						self._notes.append(s[1])
+					else:
+						self._notes.append('')
 		except IOError:
 			print("Failed to read file {}".format(filename))
 			self._route = []
@@ -87,8 +99,10 @@ class Waypoints:
 		try:
 			with open(self._save_route, 'w') as f:
 				f.write('System Name\n')
-				for s in self._route:
-					f.write(s)
+				for i in range(0, len(self._route)):
+					f.write(self._route[i])
+					f.write('|')
+					f.write(self._notes[i])
 					f.write('\n')
 
 			with open(self._save_index, 'w') as f:
