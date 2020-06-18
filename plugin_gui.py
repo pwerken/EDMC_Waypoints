@@ -6,13 +6,13 @@ import sys
 try:
 	# Python 2
 	import Tkinter as tk
-#	import ttk
+	import ttk
 	import tkFileDialog as filedialog
 except ModuleNotFoundError:
 	# Python 3
 	import tkinter as tk
-#	from tkinter import ttk
-	import tkFileDialog as filedialog
+	from tkinter import ttk
+	from tkinter import filedialog
 
 
 class PluginGui:

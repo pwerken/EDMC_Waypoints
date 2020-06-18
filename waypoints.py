@@ -2,7 +2,6 @@
 
 import os
 
-
 class Waypoints:
 
 	def __init__(self, plugin_dir):
@@ -71,7 +70,7 @@ class Waypoints:
 
 					self._route.append(s)
 		except IOError:
-			print "Failed to read file {}".format(filename)
+			print("Failed to read file {}".format(filename))
 			self._route = []
 			return False
 
@@ -82,7 +81,7 @@ class Waypoints:
 			with open(self._save_index, 'r') as f:
 				self._index = int(f.readline())
 		except IOError:
-			print "Failed to read saved route index"
+			print("Failed to read saved route index")
 
 	def save(self):
 		try:
@@ -96,4 +95,4 @@ class Waypoints:
 				f.write(str(self._index))
 				f.write('\n')
 		except IOError:
-			print "Failed to save current route"
+			print("Failed to save current route")

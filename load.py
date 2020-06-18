@@ -10,6 +10,9 @@ this = sys.modules[__name__]
 this.gui   = None
 this.route = None
 
+def plugin_start3(plugin_dir):
+	this.plugin_start(plugin_dir)
+
 def plugin_start(plugin_dir):
 	this.route = Waypoints(plugin_dir)
 
