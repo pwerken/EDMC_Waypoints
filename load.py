@@ -20,7 +20,7 @@ def plugin_app(parent):
 	this.gui = PluginGui(parent, this.route)
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
-	if (entry['event'] in ['StartUp', 'FSDJump', 'Location', 'SupercruiseEntry', 'SupercruiseExit']):
+	if (entry['event'] in ['StartUp', 'Location', 'Docked', 'CarrierJump', 'FSDJump', 'SupercruiseEntry', 'SupercruiseExit']):
 		s = entry["StarSystem"]
 	elif entry['event'] == 'FSSDiscoveryScan':
 		s = entry['SystemName']
