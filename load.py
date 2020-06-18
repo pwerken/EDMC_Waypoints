@@ -18,6 +18,7 @@ def plugin_start(plugin_dir):
 
 def plugin_app(parent):
 	this.gui = PluginGui(parent, this.route)
+	return this.gui.frame
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
 	if (entry['event'] in ['StartUp', 'Location', 'Docked', 'CarrierJump', 'FSDJump', 'SupercruiseEntry', 'SupercruiseExit']):

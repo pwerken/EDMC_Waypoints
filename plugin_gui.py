@@ -14,6 +14,8 @@ except ModuleNotFoundError:
 	from tkinter import ttk
 	from tkinter import filedialog
 
+from config import config
+from theme import theme
 
 class PluginGui:
 
@@ -22,47 +24,60 @@ class PluginGui:
 	def __init__(self, parent, route):
 		self._route = route
 
-		tk.Frame(parent, highlightthickness=1).grid(columnspan=2, sticky=tk.EW)
-		row = parent.grid_size()[1]
-		wp_label = tk.Label(parent)
-		wp_label.grid(row=row, column=0, sticky=tk.W)
-		wp_label['text'] = 'Next' + ':'
-
-		self.target = tk.Label(parent, compound=tk.RIGHT, anchor=tk.W)
-		self.target.grid(row=row, column=1, sticky=tk.EW)
-		self.target['text'] = ''
-		self.target.bind('<Button-1>', self._to_clipboard)
-
 		frame = tk.Frame(parent)
-		frame.grid(columnspan=2, sticky=tk.NSEW)
 		frame.columnconfigure(2, weight=1)
 
-		self.prev   = tk.Button(frame, text=[u'\u2190'], command=self._prev_wp)
-		self.status	= tk.Label(frame, text='- / -', justify=tk.CENTER)
-		self.next   = tk.Button(frame, text=[u'\u2192'], command=self._next_wp)
-#		self.ff     = tk.Button(frame, text=[u'\u21A0'], command=skip_forward)
-		self.clear  = tk.Button(frame, text='X', command=self._clear_route)
-		self.open   = tk.Button(frame, text='O', command=self._load_route)
+		self.prev = ttk.Button(frame, width=2)
+		self.prev.grid(row=1, column=1, sticky=tk.E)
+		self.prev_theme = tk.Label(frame, width=3)
+		self.prev_theme.grid(row=1, column=1, sticky=tk.E)
+		self.prev['text'] = self.prev_theme['text'] = '<'
+		theme.register_alternate((self.prev, self.prev_theme, self.prev_theme), {'row':1,'column':1,'sticky':tk.E})
+		self.prev.configure(command=self._prev_wp)
+		theme.button_bind(self.prev_theme, self._prev_wp)
 
-		self.prev.grid(row=1, column=1, sticky=tk.W)
-		self.status.grid(row=1, column=2, sticky=tk.NSEW)
+		self.target = tk.Label(frame, text='- / -', justify=tk.CENTER)
+		self.target.grid(row=1, column=2, sticky=tk.NSEW)
+		self.target.bind('<Button-1>', self._to_clipboard)
+
+		self.next = ttk.Button(frame, width=2)
 		self.next.grid(row=1, column=3, sticky=tk.E)
-#		self.ff.grid(row=1, column=4, sticky=tk.E)
-		self.clear.grid(row=1, column=5, sticky=tk.E)
-		self.open.grid(row=1, column=6, sticky=tk.E)
+		self.next_theme = tk.Label(frame, width=3)
+		self.next_theme.grid(row=1, column=3, sticky=tk.E)
+		self.next['text'] = self.next_theme['text'] = '>'
+		theme.register_alternate((self.next, self.next_theme, self.next_theme), {'row':1,'column':3,'sticky':tk.E})
+		self.next.configure(command=self._next_wp)
+		theme.button_bind(self.next_theme, self._next_wp)
 
+		self.open = ttk.Button(frame, width=2)
+		self.open.grid(row=1, column=4, sticky=tk.E)
+		self.open_theme = tk.Label(frame, width=3, bd=5)
+		self.open_theme.grid(row=1, column=4, sticky=tk.E)
+		self.open['text'] = self.open_theme['text'] = 'O'
+		theme.register_alternate((self.open, self.open_theme, self.open_theme), {'row':1,'column':4,'sticky':tk.E})
+		self.open.configure(command=self._load_route)
+		theme.button_bind(self.open_theme, self._load_route)
+
+		self.frame = frame
 		self.update_UI()
 
 	def update_UI(self):
-		self.target['text'] = self._route.target()
+		note = self._route.note()
+		if len(note) == 0:
+			note = '{} / {}'.format(self._route.pos(), self._route.len())
+
+		if self._route.len() == 0:
+			self.open['text'] = 'O'
+			self.target['text'] = 'no waypoints'
+		else:
+			self.open['text'] = 'X'
+			self.target['text'] = self._route.target() + '\n' + note
+
 		self.prev['state']  = 'normal' if self._route.has_prev() else 'disabled'
-		self.status['text'] = '{} / {}'.format(self._route.pos(), self._route.len())
 		self.next['state']  = 'normal' if self._route.has_next() else 'disabled'
-#		self.ff['state']    = 'normal' if False else 'disabled'
-		self.clear['state'] = 'normal' if self._route.len() > 0 else 'disabled'
 		self._to_clipboard()
 
-	def _to_clipboard(self, event = None):
+	def _to_clipboard(self, event=None):
 		if self._route.len() == 0:
 			return
 
@@ -75,28 +90,27 @@ class PluginGui:
 			self.parent.clipboard_append(target)
 			self.parent.update()
 
-	def _next_wp(self):
+	def _next_wp(self, event=None):
 		if self._route.next():
 			self.update_UI()
 
-	def _prev_wp(self):
+	def _prev_wp(self, event=None):
 		if self._route.prev():
 			self.update_UI()
 
-#	def skip_forward():
-#		sys.stderr.write("skipForward\n")
+	def _load_route(self, event=None):
+		if self._route.len() > 0:
+			self._route.clear()
+			self.update_UI()
+			return
 
-	def _load_route(self):
 		ftypes = [
 			('All supported files', '*.csv *.txt'),
 			('CSV files', '*.csv'),
 			('Text files', '*.txt'),
 		]
-		filename = filedialog.askopenfilename(filetypes = ftypes)
+		logdir = config.get('journaldir')
+		filename = filedialog.askopenfilename(initialdir=logdir, filetypes=ftypes)
 		if self._route.load(filename):
 			self.update_UI()
-
-	def _clear_route(self):
-		self._route.clear()
-		self.update_UI()
 
