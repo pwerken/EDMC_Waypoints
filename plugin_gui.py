@@ -28,11 +28,11 @@ class PluginGui:
 		frame.columnconfigure(2, weight=1)
 
 		self.prev = ttk.Button(frame, width=2)
-		self.prev.grid(row=1, column=1, sticky=tk.E)
+		self.prev.grid(row=1, column=1, sticky=tk.NSEW)
 		self.prev_theme = tk.Label(frame, width=3)
-		self.prev_theme.grid(row=1, column=1, sticky=tk.E)
+		self.prev_theme.grid(row=1, column=1, sticky=tk.NSEW)
 		self.prev['text'] = self.prev_theme['text'] = '<'
-		theme.register_alternate((self.prev, self.prev_theme, self.prev_theme), {'row':1,'column':1,'sticky':tk.E})
+		theme.register_alternate((self.prev, self.prev_theme, self.prev_theme), {'row':1,'column':1,'sticky':tk.NSEW})
 		self.prev.configure(command=self._prev_wp)
 		theme.button_bind(self.prev_theme, self._prev_wp)
 
@@ -41,20 +41,20 @@ class PluginGui:
 		self.target.bind('<Button-1>', self._to_clipboard)
 
 		self.next = ttk.Button(frame, width=2)
-		self.next.grid(row=1, column=3, sticky=tk.E)
+		self.next.grid(row=1, column=3, sticky=tk.NSEW)
 		self.next_theme = tk.Label(frame, width=3)
-		self.next_theme.grid(row=1, column=3, sticky=tk.E)
+		self.next_theme.grid(row=1, column=3, sticky=tk.NSEW)
 		self.next['text'] = self.next_theme['text'] = '>'
-		theme.register_alternate((self.next, self.next_theme, self.next_theme), {'row':1,'column':3,'sticky':tk.E})
+		theme.register_alternate((self.next, self.next_theme, self.next_theme), {'row':1,'column':3,'sticky':tk.NSEW})
 		self.next.configure(command=self._next_wp)
 		theme.button_bind(self.next_theme, self._next_wp)
 
 		self.open = ttk.Button(frame, width=2)
-		self.open.grid(row=1, column=4, sticky=tk.E)
-		self.open_theme = tk.Label(frame, width=3, bd=5)
-		self.open_theme.grid(row=1, column=4, sticky=tk.E)
+		self.open.grid(row=1, column=4, sticky=tk.NSEW)
+		self.open_theme = tk.Label(frame, width=3)
+		self.open_theme.grid(row=1, column=4, sticky=tk.NSEW)
 		self.open['text'] = self.open_theme['text'] = 'O'
-		theme.register_alternate((self.open, self.open_theme, self.open_theme), {'row':1,'column':4,'sticky':tk.E})
+		theme.register_alternate((self.open, self.open_theme, self.open_theme), {'row':1,'column':4,'sticky':tk.NSEW})
 		self.open.configure(command=self._load_route)
 		theme.button_bind(self.open_theme, self._load_route)
 
