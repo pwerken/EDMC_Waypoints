@@ -15,6 +15,9 @@ class Waypoints:
 		if self.load(self._save_route):
 			self._load_index()
 
+	def __len__(self):
+		return len(self._route)
+
 	def clear(self):
 		self._route = []
 		self._notes = []
@@ -25,20 +28,17 @@ class Waypoints:
 		if os.path.isfile(self._save_index):
 			os.remove(self._save_index)
 
-	def len(self):
-		return self._route.__len__()
-
 	def pos(self):
-		return 0 if self.len() == 0 else self._index + 1
+		return 0 if len(self) == 0 else self._index + 1
 
 	def target(self):
-		return '' if self.len() == 0 else self._route[self._index]
+		return '' if len(self) == 0 else self._route[self._index]
 
 	def note(self):
-		return '' if self.len() == 0 else self._notes[self._index]
+		return '' if len(self) == 0 else self._notes[self._index]
 
 	def has_next(self):
-		return self._index + 1 < self.len()
+		return self._index + 1 < len(self)
 
 	def has_prev(self):
 		return self._index > 0
@@ -63,7 +63,7 @@ class Waypoints:
 		return True
 
 	def load(self, filename):
-		if filename.__len__() == 0: return False
+		if len(filename) == 0: return False
 		if not os.path.isfile(filename): return False
 
 		self._route = []

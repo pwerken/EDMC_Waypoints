@@ -64,9 +64,9 @@ class PluginGui:
 	def update_UI(self):
 		note = self._route.note()
 		if len(note) == 0:
-			note = '{} / {}'.format(self._route.pos(), self._route.len())
+			note = '{} / {}'.format(self._route.pos(), len(self._route))
 
-		if self._route.len() == 0:
+		if len(self._route) == 0:
 			self.open['text'] = 'O'
 			self.target['text'] = 'no waypoints'
 		else:
@@ -78,7 +78,7 @@ class PluginGui:
 		self._to_clipboard()
 
 	def _to_clipboard(self, event=None):
-		if self._route.len() == 0:
+		if len(self._route) == 0:
 			return
 
 		target = self._route.target()
@@ -99,7 +99,7 @@ class PluginGui:
 			self.update_UI()
 
 	def _load_route(self, event=None):
-		if self._route.len() > 0:
+		if len(self._route) > 0:
 			self._route.clear()
 			self.update_UI()
 			return
