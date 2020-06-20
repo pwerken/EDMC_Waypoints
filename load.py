@@ -24,7 +24,7 @@ def plugin_start(plugin_dir):
 	Legacy (python 2.7) method for loading the plugin.
 	:param plugin_dir: directory that contains the main .py file
 	"""
-	this.plugin_start3(plugin_dir)
+	return plugin_start3(plugin_dir)
 
 
 def plugin_app(parent):
