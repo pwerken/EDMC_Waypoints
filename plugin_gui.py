@@ -75,6 +75,10 @@ class PluginGui:
 
 		self.prev['state']  = 'normal' if self._route.has_prev() else 'disabled'
 		self.next['state']  = 'normal' if self._route.has_next() else 'disabled'
+		self.open_theme['text'] = self.open['text'];
+		self.prev_theme['state'] = self.prev['state'];
+		self.next_theme['state'] = self.next['state'];
+
 		self._to_clipboard()
 
 	def _to_clipboard(self, event=None):
