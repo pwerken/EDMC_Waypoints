@@ -72,7 +72,9 @@ class Waypoints:
             with open(filename, 'r') as f:
                 for line in f:
                     s = line.rstrip(' \r\n').replace('|',',').split(',')
-                    if s[0] == 'System Name':
+                    if len(s[0]) == 0 \
+                       or s[0] == 'System Name' \
+                       or s[0][0] == '#':
                         continue
 
                     self._route.append(s[0])
