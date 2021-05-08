@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import subprocess
+from subprocess import Popen, PIPE
 import sys
 
 import tkinter as tk
@@ -82,8 +82,8 @@ class PluginGui:
             return
 
         if sys.platform == "linux" or sys.platform == "linux2":
-           command = subprocess.Popen(["echo", "-n", target], stdout=subprocess.PIPE)
-           subprocess.call(["xclip", "-selection", "c"], stdin=command.stdout)
+            command = Popen(["xclip", "-selection", "c"], stdin=PIPE)
+            command.communicate(input=target.encode(), timeout=1)
         else:
             self._parent.clipboard_clear()
             self._parent.clipboard_append(target)
