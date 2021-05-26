@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from subprocess import Popen, PIPE
 import sys
 
@@ -9,6 +7,7 @@ from tkinter import filedialog
 
 from config import config
 from theme import theme
+
 
 class PluginGui:
 
@@ -26,7 +25,8 @@ class PluginGui:
         self.open_theme = tk.Label(frame, width=3)
         self.open_theme.grid(row=1, column=1, sticky=tk.NSEW)
         self.open['text'] = self.open_theme['text'] = 'O'
-        theme.register_alternate((self.open, self.open_theme, self.open_theme), {'row':1,'column':1,'sticky':tk.NSEW})
+        theme.register_alternate((self.open, self.open_theme, self.open_theme),
+                                 {'row': 1, 'column': 1, 'sticky': tk.NSEW})
         self.open.configure(command=self._load_route)
         theme.button_bind(self.open_theme, self._load_route)
 
@@ -35,7 +35,8 @@ class PluginGui:
         self.prev_theme = tk.Label(frame, width=3)
         self.prev_theme.grid(row=1, column=2, sticky=tk.NSEW)
         self.prev['text'] = self.prev_theme['text'] = '<'
-        theme.register_alternate((self.prev, self.prev_theme, self.prev_theme), {'row':1,'column':2,'sticky':tk.NSEW})
+        theme.register_alternate((self.prev, self.prev_theme, self.prev_theme),
+                                 {'row': 1, 'column': 2, 'sticky': tk.NSEW})
         self.prev.configure(command=self._prev_wp)
         theme.button_bind(self.prev_theme, self._prev_wp)
 
@@ -48,7 +49,8 @@ class PluginGui:
         self.next_theme = tk.Label(frame, width=3)
         self.next_theme.grid(row=1, column=4, sticky=tk.NSEW)
         self.next['text'] = self.next_theme['text'] = '>'
-        theme.register_alternate((self.next, self.next_theme, self.next_theme), {'row':1,'column':4,'sticky':tk.NSEW})
+        theme.register_alternate((self.next, self.next_theme, self.next_theme),
+                                 {'row': 1, 'column': 4, 'sticky': tk.NSEW})
         self.next.configure(command=self._next_wp)
         theme.button_bind(self.next_theme, self._next_wp)
 
@@ -68,11 +70,11 @@ class PluginGui:
             self.open['text'] = 'X'
             self.target['text'] = self._route.target() + '\n' + note
 
-        self.prev['state']  = 'normal' if self._route.has_prev() else 'disabled'
-        self.next['state']  = 'normal' if self._route.has_next() else 'disabled'
-        self.open_theme['text'] = self.open['text'];
-        self.prev_theme['state'] = self.prev['state'];
-        self.next_theme['state'] = self.next['state'];
+        self.prev['state'] = 'normal' if self._route.has_prev() else 'disabled'
+        self.next['state'] = 'normal' if self._route.has_next() else 'disabled'
+        self.open_theme['text'] = self.open['text']
+        self.prev_theme['state'] = self.prev['state']
+        self.next_theme['state'] = self.next['state']
 
         self._to_clipboard()
 
@@ -109,7 +111,8 @@ class PluginGui:
             ('Text files', '*.txt'),
         ]
         logdir = config.get('journaldir')
-        filename = filedialog.askopenfilename(initialdir=logdir, filetypes=ftypes)
+        filename = filedialog.askopenfilename(initialdir=logdir,
+                                              filetypes=ftypes)
         if self._route.load(filename):
             self.update_UI()
 

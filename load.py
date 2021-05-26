@@ -7,7 +7,7 @@ from plugin_gui import PluginGui
 
 
 this = sys.modules[__name__]
-this.gui   = None
+this.gui = None
 this.route = None
 
 

@@ -2,6 +2,7 @@
 
 import os
 
+
 class Waypoints:
 
     def __init__(self, plugin_dir):
@@ -44,13 +45,17 @@ class Waypoints:
         return self._index > 0
 
     def next(self):
-        if not self.has_next(): return False
+        if not self.has_next():
+            return False
+
         self._index += 1
         self.save()
         return True
 
     def prev(self):
-        if not self.has_prev(): return False
+        if not self.has_prev():
+            return False
+
         self._index -= 1
         self.save()
         return True
@@ -62,8 +67,10 @@ class Waypoints:
         return self.next()
 
     def load(self, filename):
-        if len(filename) == 0: return False
-        if not os.path.isfile(filename): return False
+        if len(filename) == 0:
+            return False
+        if not os.path.isfile(filename):
+            return False
 
         self._route = []
         self._notes = []
@@ -71,7 +78,7 @@ class Waypoints:
         try:
             with open(filename, 'r') as f:
                 for line in f:
-                    s = line.rstrip(' \r\n').replace('|',',').split(',')
+                    s = line.rstrip(' \r\n').replace('|', ',').split(',')
                     if len(s[0]) == 0 \
                        or s[0] == 'System Name' \
                        or s[0][0] == '#':
