@@ -1,7 +1,7 @@
 # EDMC_Waypoints
 
 Plugin for [EDMC](https://github.com/EDCD/EDMarketConnector/wiki) that
-automatically copies to clipboard the next waypoint on a route you planned.
+automatically copies the next waypoint of your planned route the clipboard.
 
 ## Installation
 
@@ -32,3 +32,8 @@ Sol
 Load this route file using the 'O'-button.
 
 The 'X'-button clears the current route.
+
+The plugin expects you to go through the waypoint systems in order.  When the
+plugin detects you have reached the waypoint system, it automatically selects
+the next waypoint system. It also copies to the system clipboard for easy
+pasting in to the Galaxy Map search bar.
