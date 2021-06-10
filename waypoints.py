@@ -76,16 +76,27 @@ class Waypoints:
         self._notes = []
         self._index = 0
         try:
+            spansh = False
             with open(filename, 'r') as f:
                 for line in f:
-                    s = line.rstrip(' \r\n').replace('|', ',').split(',')
+                    clean = line.rstrip(' \r\n').replace('"', '')
+                    s = clean.replace('|', ',').split(',')
+
                     if len(s[0]) == 0 \
-                       or s[0] == 'System Name' \
                        or s[0][0] == '#':
                         continue
 
+                    if s[0] == 'System Name':
+#"System Name","Jumps"
+                        if len(s) == 2 and s[1] == 'Jumps':
+                            spansh = True
+#"System Name","Distance To Arrival","Distance Remaining","Neutron Star","Jumps"
+                        if len(s) == 5 and s[4] == 'Jumps':
+                            spansh = True
+                        continue
+
                     self._route.append(s[0])
-                    if len(s) > 1:
+                    if not spansh and len(s) > 1:
                         self._notes.append(s[1])
                     else:
                         self._notes.append('')
