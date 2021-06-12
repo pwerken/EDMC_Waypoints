@@ -110,7 +110,8 @@ class PluginGui:
             ('CSV files', '*.csv'),
             ('Text files', '*.txt'),
         ]
-        logdir = config.get('journaldir')
+        logdir = config.get_str('journaldir',
+                                default=config.default_journal_dir)
         filename = filedialog.askopenfilename(initialdir=logdir,
                                               filetypes=ftypes)
         if self._route.load(filename):
