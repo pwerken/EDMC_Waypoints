@@ -1,4 +1,4 @@
-# EDMC_Waypoints
+# Waypoints plugin for [EDMC](https://github.com/Marginal/EDMarketConnector/wiki)
 
 Plugin for [EDMC](https://github.com/EDCD/EDMarketConnector/wiki) that
 automatically copies the next waypoint of your planned route the clipboard.
@@ -15,7 +15,6 @@ automatically copies the next waypoint of your planned route the clipboard.
 ## Usage
 
 First plot your route using your favorite tool.  Copy your route to a file.
-
 This should be a csv-file, where the first field contains the system name.
 As an alternative field-seperator '|' is also accepted.
 Empty lines and lines starting with '#' are ignored.
