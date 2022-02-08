@@ -22,7 +22,9 @@ class Waypoints:
         return '' if len(self) == 0 else self._route[0]
 
     def reached(self, system):
-        if len(self) == 0 or system.lower() != self.target().lower():
+        if len(self) == 0 or system is None:
+            return
+        if system.lower() != self.target().lower():
             return
         del self._route[0]
         self.save()
