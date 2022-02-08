@@ -41,7 +41,6 @@ class Waypoints:
             return False
 
         try:
-            self.clear()
             with open(filename, 'r') as f:
                 for line in f:
                     clean = line.rstrip(' \r\n').replace('"', '')
