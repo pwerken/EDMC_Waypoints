@@ -3,27 +3,19 @@
 import sys
 
 from waypoints import Waypoints
-from plugin_gui import PluginGui
-
 
 this = sys.modules[__name__]
-this.gui = None
 this.route = None
-
 
 def plugin_start3(plugin_dir):
     this.route = Waypoints(plugin_dir)
     return "Waypoints"
 
-
 def plugin_start(plugin_dir):
     return plugin_start3(plugin_dir)
 
-
 def plugin_app(parent):
-    this.gui = PluginGui(parent, this.route)
-    return this.gui.frame
-
+    return this.route.create_ui(parent)
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     if (entry['event'] in ['StartUp', 'Location', 'Docked',
@@ -35,5 +27,4 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     else:
         return
 
-    if this.route.reached(s):
-        this.gui.update_UI()
+    this.route.reached(s)
