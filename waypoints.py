@@ -15,9 +15,10 @@ class Waypoints:
     def __len__(self):
         return len(self._route)
 
-    def clear(self):
+    def clear(self, remove_save=True):
         self._route.clear()
-        self.save()
+        if remove_save:
+            self.save()
 
     def create_ui(self, parent):
         if self._gui is None:
@@ -41,7 +42,7 @@ class Waypoints:
             return False
 
         try:
-            self._route.clear()
+            self.clear(remove_save=False)
             with open(filename, 'r') as f:
                 for line in f:
                     clean = line.rstrip(' \r\n').replace('"', '')
