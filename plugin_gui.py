@@ -44,7 +44,7 @@ class PluginGui:
             self._target['text'] = 'no waypoints'
         else:
             self._button_open['text'] = f'{waypoints}'
-            self._target['text'] = self._route.target()
+            self._target['text'] = self._route.next()
         self._button_theme['text'] = self._button_open['text']
         self._to_clipboard()
 
@@ -52,7 +52,7 @@ class PluginGui:
         if len(self._route) == 0:
             return
 
-        target = self._route.target()
+        target = self._route.next()
         if sys.platform == "linux" or sys.platform == "linux2":
             command = Popen(["xclip", "-selection", "c"], stdin=PIPE)
             command.communicate(input=target.encode(), timeout=1)

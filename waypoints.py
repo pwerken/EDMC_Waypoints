@@ -5,6 +5,7 @@ from plugin_gui import PluginGui
 class Waypoints:
 
     _gui = None
+    _next = None
     _route = list()
     _save_route = None
 
@@ -17,6 +18,7 @@ class Waypoints:
 
     def clear(self, remove_save=True):
         self._route.clear()
+        self._next = None
         if remove_save:
             self.save()
 
@@ -25,15 +27,20 @@ class Waypoints:
             self._gui = PluginGui(parent, self)
         return self._gui.get_ui()
 
-    def target(self):
-        return '' if len(self) == 0 else self._route[0]
+    def next(self):
+        return self._next
 
     def reached(self, system):
-        if len(self) == 0 or system is None:
+        if system is None or self._next is None:
             return
-        if system.lower() != self.target().lower():
+        if system.casefold() != self._next.casefold():
             return
+
         del self._route[0]
+        self._next = None
+        if len(self) > 0:
+            self._next = self._route[0]
+
         self.save()
         self._gui.update_ui()
 
