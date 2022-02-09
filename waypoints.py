@@ -60,6 +60,7 @@ class Waypoints:
                     if s[0].lower() == 'system name':
                         continue
                     self._route.append(s[0])
+            self._next = self._route[0]
             self.save()
             return True
         except IOError:
