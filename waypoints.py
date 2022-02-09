@@ -10,7 +10,7 @@ class Waypoints:
     _save_file = None
 
     def __init__(self, plugin_dir):
-        self._save_file = os.path.join(plugin_dir, 'save_file.txt')
+        self._save_file = os.path.join(plugin_dir, 'save_route.txt')
         self.load(self._save_file)
 
     def __len__(self):
