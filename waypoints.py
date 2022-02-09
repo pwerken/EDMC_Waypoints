@@ -7,11 +7,11 @@ class Waypoints:
     _gui = None
     _next = None
     _route = list()
-    _save_route = None
+    _save_file = None
 
     def __init__(self, plugin_dir):
-        self._save_route = os.path.join(plugin_dir, 'save_route.txt')
-        self.load(self._save_route)
+        self._save_file = os.path.join(plugin_dir, 'save_file.txt')
+        self.load(self._save_file)
 
     def __len__(self):
         return len(self._route)
@@ -69,11 +69,11 @@ class Waypoints:
 
     def save(self):
         if len(self) == 0:
-            if os.path.isfile(self._save_route):
-                os.remove(self._save_route)
+            if os.path.isfile(self._save_file):
+                os.remove(self._save_file)
             return
         try:
-            with open(self._save_route, 'w') as f:
+            with open(self._save_file, 'w') as f:
                 f.write('System Name\n')
                 for i in range(0, len(self)):
                     f.write(self._route[i])
