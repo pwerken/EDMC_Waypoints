@@ -28,6 +28,8 @@ class Waypoints:
         return self._gui.get_ui()
 
     def next(self):
+        if self._next is None and len(self) > 0:
+            self._next = self._route[0]
         return self._next
 
     def reached(self, system):
@@ -38,8 +40,6 @@ class Waypoints:
 
         del self._route[0]
         self._next = None
-        if len(self) > 0:
-            self._next = self._route[0]
 
         self.save()
         self._gui.update_ui()
@@ -60,7 +60,6 @@ class Waypoints:
                     if s[0].lower() == 'system name':
                         continue
                     self._route.append(s[0])
-            self._next = self._route[0]
             self.save()
             return True
         except IOError:
