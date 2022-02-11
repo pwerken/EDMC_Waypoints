@@ -21,3 +21,8 @@ def plugin_app(parent):
 
 def journal_entry(cmdr, is_beta, system, station, entry, state):
     this.route.reached(system)
+
+    if entry['event'] == 'NavRoute':
+        this.route.star_pos(entry.get('Route')[0].get('StarPos'))
+    else:
+        this.route.star_pos(entry.get('StarPos'))
