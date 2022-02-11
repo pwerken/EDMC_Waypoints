@@ -9,9 +9,11 @@ class Waypoints:
     _route = list()
     _save_file = None
 
-    def __init__(self, plugin_dir):
+    def __init__(self, plugin_dir, logger):
+        self._logger = logger
         self._save_file = os.path.join(plugin_dir, 'save_route.txt')
         self.load(self._save_file)
+        self._logger.debug('started')
 
     def __len__(self):
         return len(self._route)
@@ -25,6 +27,7 @@ class Waypoints:
     def create_ui(self, parent):
         if self._gui is None:
             self._gui = PluginGui(parent, self)
+        self._logger.debug('create_ui')
         return self._gui.get_ui()
 
     def next(self):
@@ -38,6 +41,7 @@ class Waypoints:
         if system.casefold() != self._next.casefold():
             return
 
+        self._logger.debug(f'reached {system}')
         del self._route[0]
         self._next = None
 
@@ -50,6 +54,7 @@ class Waypoints:
 
         try:
             self.clear(remove_save=False)
+            self._logger.info(f'load={filename}')
             with open(filename, 'r') as f:
                 for line in f:
                     clean = line.rstrip(' \r\n').replace('"', '')
@@ -63,20 +68,21 @@ class Waypoints:
             self.save()
             return True
         except IOError:
-            print("Failed to read file {}".format(filename))
             self.clear()
             return False
 
     def save(self):
-        if len(self) == 0:
-            if os.path.isfile(self._save_file):
-                os.remove(self._save_file)
-            return
         try:
+            if len(self) == 0:
+                if os.path.isfile(self._save_file):
+                    os.remove(self._save_file)
+                    self._logger.debug(f'deleted')
+                return
+            self._logger.debug(f'save')
             with open(self._save_file, 'w') as f:
                 f.write('System Name\n')
                 for i in range(0, len(self)):
                     f.write(self._route[i])
                     f.write('\n')
         except IOError:
-            print("Failed to save current route")
+            self._logger.error("Failed to save current route")

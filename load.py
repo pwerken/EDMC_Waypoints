@@ -1,13 +1,17 @@
 import sys
+import logging
 
+from config import appname
 from waypoints import Waypoints
 
 this = sys.modules[__name__]
 this.route = None
 
 def plugin_start3(plugin_dir):
-    this.route = Waypoints(plugin_dir)
-    return 'Waypoints'
+    plugin_name = 'Waypoints'
+    logger = logging.getLogger(f'{appname}.{plugin_name}')
+    this.route = Waypoints(plugin_dir, logger)
+    return plugin_name
 
 def plugin_start(plugin_dir):
     return plugin_start3(plugin_dir)
