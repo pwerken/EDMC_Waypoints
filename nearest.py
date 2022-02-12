@@ -2,6 +2,7 @@ class Nearest:
 
     _current = None
     _locations = dict()
+    _header = ['system name', 'x', 'y', 'z']
 
     def active(self):
         if self._current is None:
@@ -38,13 +39,11 @@ class Nearest:
             d += (self._current[i] - xyz[i])**2
         return d
 
-    @staticmethod
-    def check_header(splits):
+    def check_header(self, splits):
         if len(splits) < 4:
             return False
-        xyz = ['system name', 'x', 'y', 'z']
         for i in range(0, 4):
-            if splits[i].casefold() != xyz[i]:
+            if splits[i].casefold() != self._header[i]:
                 return False
         return True
 
@@ -60,8 +59,8 @@ class Nearest:
 
     def header_line(self):
         if not self.active():
-            return 'system name\n'
-        return 'system name,x,y,z\n'
+            return self._header[0] + '\n'
+        return ','.join(self._header) + '\n'
 
     def system_line(self, system):
         if system not in self._locations:

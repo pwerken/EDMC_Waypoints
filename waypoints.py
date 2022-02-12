@@ -39,6 +39,7 @@ class Waypoints:
                 self._logger.debug('sorting...')
                 self._route.sort(key=self._nearest.cmp)
             self._next = self._route[0]
+            self._logger.debug(f'next={self._next}')
         return self._next
 
     def reached(self, system):
@@ -85,7 +86,7 @@ class Waypoints:
                     if len(s[0]) == 0 or s[0][0] == '#':
                         continue
                     if s[0].casefold() == 'system name':
-                        xyz = Nearest.check_header(s)
+                        xyz = self._nearest.check_header(s)
                         self._logger.info(f'xyz={xyz}')
                         continue
                     self._route.append(s[0])
