@@ -25,6 +25,7 @@ class PluginGui:
         self._button_open.bind('<Double-Button-1>', self._clear_route)
 
         self._button_theme = tk.Label(self._button)
+        self._button_theme.grid(g)
         self._button_theme.bind('<Double-Button-1>', self._clear_route)
         theme.register_alternate((self._button_open, self._button_theme), g)
         theme.button_bind(self._button_theme, self._load_route)
