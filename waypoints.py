@@ -92,6 +92,7 @@ class Waypoints:
                     self._route.append(s[0])
                     if xyz and not self._nearest.parse_line(s):
                         self._logger.error(f'Failed: {s[0]} has missing xyz')
+                        self._nearest.clear()
                         xyz = False
             self.save()
             return True
