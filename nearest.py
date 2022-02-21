@@ -58,7 +58,7 @@ class Nearest:
         return True
 
     def header_line(self):
-        if not self.active():
+        if len(self._locations) == 0:
             return self._header[0] + '\n'
         return ','.join(self._header) + '\n'
 
