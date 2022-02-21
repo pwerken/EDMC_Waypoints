@@ -1,4 +1,5 @@
 import sys
+import os
 import logging
 
 from config import appname
@@ -8,7 +9,7 @@ this = sys.modules[__name__]
 this.route = None
 
 def plugin_start3(plugin_dir):
-    plugin_name = 'Waypoints'
+    plugin_name = os.path.basename(os.path.dirname(__file__))
     logger = logging.getLogger(f'{appname}.{plugin_name}')
     this.route = Waypoints(plugin_dir, logger)
     return plugin_name
