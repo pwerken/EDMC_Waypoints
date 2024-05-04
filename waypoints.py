@@ -56,7 +56,7 @@ class Waypoints:
         else:
             self._nearest.set_location(self._nearest.del_system(system))
             self.save()
-        self._gui.update_ui()
+        self._gui.update_ui(True)
 
     def star_pos(self, star_pos):
         if not self._nearest.set_location(star_pos):
@@ -64,11 +64,11 @@ class Waypoints:
         if len(self) == 0:
             return
         if self._nearest.at_system(self._route[0]):
-            self._nearest.del_system(self._route[0])
-            del self.route[0]
-        self._next = None
-        self.save()
-        self._gui.update_ui()
+            self.reached(self._route[0])
+        else:
+            self._next = None
+            self.save()
+            self._gui.update_ui()
 
     def load(self, filename):
         if len(filename) == 0 or not os.path.isfile(filename):

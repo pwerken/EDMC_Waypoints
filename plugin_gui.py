@@ -33,12 +33,12 @@ class PluginGui:
         self._target = tk.Label(parent, text='', anchor=tk.W)
         self._target.bind('<Button-1>', self._to_clipboard)
 
-        self.update_ui()
+        self.update_ui(True)
 
     def get_ui(self):
         return (self._button, self._target)
 
-    def update_ui(self):
+    def update_ui(self, copyToClipboard=False):
         waypoints = len(self._route)
         if waypoints == 0:
             self._button_open['text'] = '  Open  '
@@ -47,7 +47,8 @@ class PluginGui:
             self._button_open['text'] = f'{waypoints}'
             self._target['text'] = self._route.next()
         self._button_theme['text'] = self._button_open['text']
-        self._to_clipboard()
+        if copyToClipboard:
+            self._to_clipboard()
 
     def _to_clipboard(self, event=None):
         if len(self._route) == 0:
