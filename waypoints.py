@@ -1,5 +1,7 @@
+import logging
 import os
 
+from config     import appname
 from plugin_gui import PluginGui
 from nearest    import Nearest
 
@@ -11,11 +13,10 @@ class Waypoints:
     _nearest = Nearest()
     _save_file = None
 
-    def __init__(self, plugin_dir, logger):
-        self._logger = logger
+    def __init__(self, plugin_dir):
+        self._logger = logging.getLogger(f'{appname}.Waypoints')
         self._save_file = os.path.join(plugin_dir, 'save_route.txt')
         self.load(self._save_file)
-        self._logger.debug('started')
 
     def __len__(self):
         return len(self._route)
@@ -30,7 +31,6 @@ class Waypoints:
     def create_ui(self, parent):
         if self._gui is None:
             self._gui = PluginGui(parent, self)
-        self._logger.debug('create_ui')
         return self._gui.get_ui()
 
     def next(self):
@@ -64,7 +64,6 @@ class Waypoints:
         if len(self) == 0:
             return
         if self._nearest.at_system(self._route[0]):
-            self._logger.debug(f'reached {star_pos}')
             self._nearest.del_system(self._route[0])
             del self.route[0]
         self._next = None
