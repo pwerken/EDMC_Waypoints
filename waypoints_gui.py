@@ -8,7 +8,7 @@ from tkinter import filedialog
 from config import config
 from theme import theme
 
-class PluginGui:
+class WaypointsGUI:
 
     _route = None
     _button = None

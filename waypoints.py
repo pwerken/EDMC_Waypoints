@@ -1,9 +1,9 @@
 import logging
 import os
 
-from config     import appname
-from plugin_gui import PluginGui
-from nearest    import Nearest
+from config        import appname
+from waypoints_gui import WaypointsGUI
+from nearest       import Nearest
 
 class Waypoints:
 
@@ -30,7 +30,7 @@ class Waypoints:
 
     def create_ui(self, parent):
         if self._gui is None:
-            self._gui = PluginGui(parent, self)
+            self._gui = WaypointsGUI(parent, self)
         return self._gui.get_ui()
 
     def next(self):
