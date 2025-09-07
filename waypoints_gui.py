@@ -80,5 +80,5 @@ class WaypointsGUI:
                                 default=config.default_journal_dir)
         filename = filedialog.askopenfilename(initialdir=logdir,
                                               filetypes=ftypes)
-        if self._route.load(filename):
+        if self._route.readfile(filename):
             self.update_ui()

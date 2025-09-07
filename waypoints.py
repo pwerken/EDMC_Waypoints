@@ -14,9 +14,12 @@ class Waypoints:
     _save_file = None
 
     def __init__(self, plugin_dir):
-        self._logger = logging.getLogger(f'{appname}.Waypoints')
+        self._logger = logging.getLogger(f'{appname}.{__class__.__name__}')
         self._save_file = os.path.join(plugin_dir, 'save_route.txt')
-        self.load(self._save_file)
+        self.readfile(self._save_file)
+
+    def load(self):
+        return __class__.__name__
 
     def __len__(self):
         return len(self._route)
@@ -70,13 +73,13 @@ class Waypoints:
             self.save()
             self._gui.update_ui()
 
-    def load(self, filename):
+    def readfile(self, filename):
         if len(filename) == 0 or not os.path.isfile(filename):
             return False
         try:
             self.clear(remove_save=False)
             xyz = False
-            self._logger.info(f'load={filename}')
+            self._logger.info(f'readfile={filename}')
             with open(filename, 'r') as f:
                 for line in f:
                     clean = line.rstrip(' \r\n').replace('"', '')

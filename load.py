@@ -1,5 +1,4 @@
 import sys
-
 from waypoints import Waypoints
 
 this = sys.modules[__name__]
@@ -7,7 +6,7 @@ this.route = None
 
 def plugin_start3(plugin_dir):
     this.route = Waypoints(plugin_dir)
-    return 'Waypoints'
+    return this.route.load()
 
 def plugin_start(plugin_dir):
     return plugin_start3(plugin_dir)
