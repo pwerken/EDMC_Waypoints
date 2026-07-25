@@ -14,7 +14,7 @@ class Waypoints:
     _save_file = None
 
     def __init__(self, plugin_dir):
-        self._logger = logging.getLogger(f'{appname}.{__class__.__name__}')
+        self._logger = logging.getLogger(f'{appname}.Waypoints')
         self._save_file = os.path.join(plugin_dir, 'save_route.txt')
         self.readfile(self._save_file)
 
@@ -32,7 +32,7 @@ class Waypoints:
             self.save()
 
     def create_ui(self, parent):
-        if self._gui is None:
+        if not self._gui:
             self._gui = WaypointsGUI(parent, self)
         return self._gui.get_ui()
 
@@ -58,20 +58,24 @@ class Waypoints:
             self.clear()
         else:
             self._nearest.set_location(self._nearest.del_system(system))
+            self.next()
             self.save()
-        self._gui.update_ui(True)
+        if self._gui:
+            self._gui.update_ui(True)
 
     def star_pos(self, star_pos):
-        if not self._nearest.set_location(star_pos):
-            return
         if len(self) == 0:
+            return
+        if not self._nearest.set_location(star_pos):
             return
         if self._nearest.at_system(self._route[0]):
             self.reached(self._route[0])
         else:
             self._next = None
+            self.next()
             self.save()
-            self._gui.update_ui()
+            if self._gui:
+                self._gui.update_ui()
 
     def readfile(self, filename):
         if len(filename) == 0 or not os.path.isfile(filename):
