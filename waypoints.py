@@ -8,6 +8,8 @@ from nearest       import Nearest
 class Waypoints:
 
     _gui = None
+    _here_position = None
+    _here_system = None
     _next = None
     _route = list()
     _nearest = Nearest()
@@ -46,6 +48,7 @@ class Waypoints:
         return self._next
 
     def reached(self, system):
+        self._here_system = system
         if system is None or self._next is None:
             return
         if system.casefold() != self._next.casefold():
@@ -58,12 +61,12 @@ class Waypoints:
             self.clear()
         else:
             self._nearest.set_location(self._nearest.del_system(system))
-            self.next()
             self.save()
         if self._gui:
             self._gui.update_ui(True)
 
     def star_pos(self, star_pos):
+        self._position = star_pos
         if len(self) == 0:
             return
         if not self._nearest.set_location(star_pos):
@@ -113,7 +116,10 @@ class Waypoints:
                     os.remove(self._save_file)
                     self._logger.debug(f'deleted')
                 return
+
             self._logger.debug(f'save')
+            self.reached(self._here_system)
+            self.star_pos(self._here_position)
             with open(self._save_file, 'w') as f:
                 f.write(self._nearest.header_line())
                 for i in range(0, len(self)):
