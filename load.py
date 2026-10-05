@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from typing import Any, Callable
+from typing import Any
 from waypoints import Waypoints
 
 type Entry = dict[str, Any]

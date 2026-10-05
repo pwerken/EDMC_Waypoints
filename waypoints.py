@@ -10,9 +10,9 @@ class Waypoints:
     _gui = None
     _here_position = None
     _here_system = None
-    _next = None
-    _route = list()
     _nearest = Nearest()
+    _next = None
+    _route = []
     _save_file = None
 
     def __init__(self, plugin_dir):
@@ -36,7 +36,7 @@ class Waypoints:
     def create_ui(self, parent):
         if not self._gui:
             self._gui = WaypointsGUI(parent, self)
-        return self._gui.get_ui()
+        return self._gui
 
     def next(self):
         if self._next is None and len(self) > 0:
@@ -44,7 +44,7 @@ class Waypoints:
                 self._logger.debug('sorting...')
                 self._route.sort(key=self._nearest.cmp)
             self._next = self._route[0]
-            self._logger.debug(f'next={self._next}')
+            self._logger.debug('next=%s', self._next)
         return self._next
 
     def reached(self, system):
@@ -54,7 +54,7 @@ class Waypoints:
         if system.casefold() != self._next.casefold():
             return
 
-        self._logger.debug(f'reached {system}')
+        self._logger.debug('reached %s', system)
         del self._route[0]
         self._next = None
         if len(self) == 0:
@@ -63,7 +63,7 @@ class Waypoints:
             self._nearest.set_location(self._nearest.del_system(system))
             self.save()
         if self._gui:
-            self._gui.update_ui(True)
+            self._gui.update(True)
 
     def star_pos(self, star_pos):
         self._position = star_pos
@@ -73,12 +73,6 @@ class Waypoints:
             return
         if self._nearest.at_system(self._route[0]):
             self.reached(self._route[0])
-        else:
-            self._next = None
-            self.next()
-            self.save()
-            if self._gui:
-                self._gui.update_ui()
 
     def readfile(self, filename):
         if len(filename) == 0 or not os.path.isfile(filename):
@@ -86,8 +80,8 @@ class Waypoints:
         try:
             self.clear(remove_save=False)
             xyz = False
-            self._logger.info(f'readfile={filename}')
-            with open(filename, 'r') as f:
+            self._logger.info('readfile=%s', filename)
+            with open(filename, 'r', encoding='utf8') as f:
                 for line in f:
                     clean = line.rstrip(' \r\n').replace('"', '')
                     s = clean.replace('|', ',').split(',')
@@ -96,11 +90,11 @@ class Waypoints:
                         continue
                     if s[0].casefold() == 'system name':
                         xyz = self._nearest.check_header(s)
-                        self._logger.info(f'xyz={xyz}')
+                        self._logger.info('xyz=%s', xyz)
                         continue
                     self._route.append(s[0])
                     if xyz and not self._nearest.parse_line(s):
-                        self._logger.error(f'Failed: {s[0]} has missing xyz')
+                        self._logger.error('Failed: %s has missing xyz', s[0])
                         self._nearest.clear()
                         xyz = False
             self.save()
@@ -114,15 +108,15 @@ class Waypoints:
             if len(self) == 0:
                 if os.path.isfile(self._save_file):
                     os.remove(self._save_file)
-                    self._logger.debug(f'deleted')
+                    self._logger.debug('deleted')
                 return
 
-            self._logger.debug(f'save')
+            self._logger.debug('save')
             self.reached(self._here_system)
             self.star_pos(self._here_position)
-            with open(self._save_file, 'w') as f:
+            with open(self._save_file, 'w', encoding='utf8') as f:
                 f.write(self._nearest.header_line())
                 for i in range(0, len(self)):
                     f.write(self._nearest.system_line(self._route[i]))
         except IOError:
-            self._logger.error("Failed to save current route")
+            self._logger.error('Failed to save current route')

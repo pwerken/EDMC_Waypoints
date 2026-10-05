@@ -1,7 +1,7 @@
 class Nearest:
 
     _current = None
-    _locations = dict()
+    _locations = {}
     _header = ['system name', 'x', 'y', 'z']
 
     def active(self):

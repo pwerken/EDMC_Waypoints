@@ -1,49 +1,38 @@
-from subprocess import Popen, PIPE
+import tkinter as tk
 import sys
 
-import tkinter as tk
-from tkinter import ttk
-from tkinter import filedialog
-
 from config import config
-from theme import theme
+from subprocess import Popen, PIPE
 
-class WaypointsGUI:
-
+class WaypointsGUI(tk.Label):
+    _parent = None
+    _popup = None
     _route = None
 
-    _parent = None
-    _label = None
-    _popup = None
-
     def __init__(self, parent, route):
-        self._route = route
+        super().__init__(parent, text='', anchor=tk.W)
 
         self._parent = parent
+        self._route = route
 
-        self._popup = tk.Menu(parent, tearoff = 0);
+        self._popup = tk.Menu(parent, tearoff = 0)
         self._popup.add_command(label='Waypoints', state=tk.DISABLED)
         self._popup.add_command(command=self._popup_cmd)
 
-        self._label = tk.Label(parent, text='', anchor=tk.W)
-        self._label.bind('<Button-1>', self._to_clipboard)
-        self._label.bind('<Button-3>', self._toggle_popup)
+        self.bind('<Button-1>', self._to_clipboard)
+        self.bind('<Button-3>', self._toggle_popup)
+        self.update()
 
-        self.update_ui(True)
-
-    def get_ui(self):
-        return self._label
-
-    def update_ui(self, copyToClipboard=False):
+    def update(self, copy_to_clipboard=False):
         waypoints = len(self._route)
         if waypoints == 0:
-            self._label['text'] = 'no waypoints'
+            self['text'] = 'no waypoints'
             self._popup.entryconfigure(1, label='load route')
         else:
-            self._label['text'] = f'{waypoints} : {self._route.next()}'
+            self['text'] = f'{waypoints} : {self._route.next()}'
             self._popup.entryconfigure(1, label='clear route')
 
-        if copyToClipboard:
+        if copy_to_clipboard:
             self._to_clipboard()
 
     def _toggle_popup(self, event):
@@ -52,12 +41,12 @@ class WaypointsGUI:
         else:
             self._popup.post(event.x_root, event.y_root)
 
-    def _to_clipboard(self, event=None):
+    def _to_clipboard(self, _event=None):
         if len(self._route) == 0:
             return
 
         target = self._route.next()
-        if sys.platform == "linux" or sys.platform == "linux2":
+        if sys.platform in ("linux", "linux2"):
             command = Popen(["xclip", "-selection", "c"], stdin=PIPE)
             command.communicate(input=target.encode(), timeout=1)
         else:
@@ -65,10 +54,10 @@ class WaypointsGUI:
             self._parent.clipboard_append(target)
             self._parent.update()
 
-    def _popup_cmd(self, event=None):
+    def _popup_cmd(self, _event=None):
         if len(self._route) > 0:
             self._route.clear()
-            self.update_ui()
+            self.update()
             return
 
         ftypes = [
@@ -78,7 +67,7 @@ class WaypointsGUI:
         ]
         logdir = config.get_str('journaldir',
                                 default=config.default_journal_dir)
-        filename = filedialog.askopenfilename(initialdir=logdir,
+        filename = tk.filedialog.askopenfilename(initialdir=logdir,
                                               filetypes=ftypes)
         if self._route.readfile(filename):
-            self.update_ui()
+            self.update()
