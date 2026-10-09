@@ -1,21 +1,18 @@
 import tkinter as tk
 import sys
 
-from config import config
+from tkinter    import filedialog
 from subprocess import Popen, PIPE
+from config     import config
 
 class WaypointsGUI(tk.Label):
-    _parent = None
-    _popup = None
-    _route = None
-
-    def __init__(self, parent, route):
+    def __init__(self, parent: tk.Frame, route):
         super().__init__(parent, text='', anchor=tk.W)
 
         self._parent = parent
         self._route = route
 
-        self._popup = tk.Menu(parent, tearoff = 0)
+        self._popup = tk.Menu(parent, tearoff=0)
         self._popup.add_command(label='Waypoints', state=tk.DISABLED)
         self._popup.add_command(command=self._popup_cmd)
 
@@ -23,7 +20,7 @@ class WaypointsGUI(tk.Label):
         self.bind('<Button-3>', self._toggle_popup)
         self.update()
 
-    def update(self, copy_to_clipboard=False):
+    def update(self, copy_to_clipboard: bool = False) -> None:
         waypoints = len(self._route)
         if waypoints == 0:
             self['text'] = 'no waypoints'
@@ -35,13 +32,13 @@ class WaypointsGUI(tk.Label):
         if copy_to_clipboard:
             self._to_clipboard()
 
-    def _toggle_popup(self, event):
+    def _toggle_popup(self, event) -> None:
         if self._popup.winfo_ismapped():
             self._popup.unpost()
         else:
             self._popup.post(event.x_root, event.y_root)
 
-    def _to_clipboard(self, _event=None):
+    def _to_clipboard(self, _event = None) -> None:
         if len(self._route) == 0:
             return
 
@@ -54,7 +51,7 @@ class WaypointsGUI(tk.Label):
             self._parent.clipboard_append(target)
             self._parent.update()
 
-    def _popup_cmd(self, _event=None):
+    def _popup_cmd(self, _event = None) -> None:
         if len(self._route) > 0:
             self._route.clear()
             self.update()
@@ -67,7 +64,7 @@ class WaypointsGUI(tk.Label):
         ]
         logdir = config.get_str('journaldir',
                                 default=config.default_journal_dir)
-        filename = tk.filedialog.askopenfilename(initialdir=logdir,
+        filename = filedialog.askopenfilename(initialdir=logdir,
                                               filetypes=ftypes)
         if self._route.readfile(filename):
             self.update()

@@ -5,12 +5,12 @@ from waypoints import Waypoints
 
 type Entry = dict[str, Any]
 type State = dict[str, Any]
-type PluginUI = tuple[tk.Widget, tk.Widget] | tk.Widget | None
+type PluginGui = tuple[tk.Widget, tk.Widget] | tk.Widget | None
 
 class This:
     """Holds plugin globals."""
-    def __init__(self):
-        self.module: Waypoints= None
+    def __init__(self) -> None:
+        self.module: Waypoints | None = None
 
 this = This()
 
@@ -28,17 +28,20 @@ def plugin_stop() -> None:
     """Stop this plugin."""
     this.module = None
 
-def plugin_app(parent: tk.Frame) -> PluginUI:
+def plugin_app(parent: tk.Frame) -> PluginGui:
     """Create TK widgets for the EDMarketConnector main window"""
+    if this.module is None:
+        return None
+
     return this.module.create_ui(parent)
 
 def journal_entry(
-    cmdr: str,
-    is_beta: bool,
+    _cmdr: str,
+    _is_beta: bool,
     system: str | None,
-    station: str | None,
+    _station: str | None,
     entry: Entry,
-    state: State,
+    _state: State,
 ) -> None:
     """
     Handle a new Journal event.
@@ -50,9 +53,12 @@ def journal_entry(
     :param entry: The journal event
     :param state: More info about the commander, their ship and their cargo
     """
+    if this.module is None:
+        return
+
     this.module.reached(system)
 
     if entry['event'] == 'NavRoute':
-        this.module.star_pos(entry.get('Route')[0].get('StarPos'))
+        this.module.star_pos(entry.get('Route', [{}])[0].get('StarPos'))
     else:
         this.module.star_pos(entry.get('StarPos'))

@@ -11,34 +11,34 @@ class Waypoints:
     _here_position = None
     _here_system = None
     _nearest = Nearest()
-    _next = None
-    _route = []
-    _save_file = None
+    _next: str | None = None
+    _route: list[str] = []
+    _save_file: str
 
-    def __init__(self, plugin_dir):
+    def __init__(self, plugin_dir: str) -> None:
         self._logger = logging.getLogger(f'{appname}.Waypoints')
         self._save_file = os.path.join(plugin_dir, 'save_route.txt')
         self.readfile(self._save_file)
 
-    def load(self):
-        return __class__.__name__
+    def load(self) -> str:
+        return self.__class__.__name__
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._route)
 
-    def clear(self, remove_save=True):
+    def clear(self, remove_save: bool = True) -> None:
         self._route.clear()
         self._next = None
         self._nearest.clear()
         if remove_save:
             self.save()
 
-    def create_ui(self, parent):
+    def create_ui(self, parent) -> WaypointsGUI:
         if not self._gui:
             self._gui = WaypointsGUI(parent, self)
         return self._gui
 
-    def next(self):
+    def next(self) -> str | None:
         if self._next is None and len(self) > 0:
             if self._nearest.active():
                 self._logger.debug('sorting...')
@@ -47,7 +47,7 @@ class Waypoints:
             self._logger.debug('next=%s', self._next)
         return self._next
 
-    def reached(self, system):
+    def reached(self, system: str | None) -> None:
         self._here_system = system
         if system is None or self._next is None:
             return
@@ -65,8 +65,8 @@ class Waypoints:
         if self._gui:
             self._gui.update(True)
 
-    def star_pos(self, star_pos):
-        self._position = star_pos
+    def star_pos(self, star_pos) -> None:
+        self._here_position = star_pos
         if len(self) == 0:
             return
         if not self._nearest.set_location(star_pos):
@@ -74,7 +74,7 @@ class Waypoints:
         if self._nearest.at_system(self._route[0]):
             self.reached(self._route[0])
 
-    def readfile(self, filename):
+    def readfile(self, filename: str) -> bool:
         if len(filename) == 0 or not os.path.isfile(filename):
             return False
         try:
@@ -103,7 +103,7 @@ class Waypoints:
             self.clear()
             return False
 
-    def save(self):
+    def save(self) -> None:
         try:
             if len(self) == 0:
                 if os.path.isfile(self._save_file):
