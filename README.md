@@ -14,10 +14,45 @@ automatically copies the next waypoint of your planned route the clipboard.
 
 ## Usage
 
-First plot your route using your favorite tool.  Copy your route to a file.
-This should be a csv-file, where the first field contains the system name.
-As an alternative field-seperator '|' is also accepted.
-Empty lines and lines starting with '#' are ignored.
+ 1. Plot your route using your favorite tool.
+ 2. Save the route to a local file.
+ 3. Load the route file into the plugin by right-clicking the label to bring
+    up the context menu.
+
+Once a route is loaded, the plugin displays the next system on your path. When
+you reach that system, the plugin automatically advances to the next
+destination and copies its name to your clipboard.
+
+You can left-click the system name to manually copy it to the clipboard again.
+
+## Route CSV format
+
+The route must be saved as CSV file. Lines starting with # and empty lines are
+ignored.  Either a comma ',' or a vertical bar '|' are accepted as field
+separator.
+
+The header line is optional for both formats. If the first line does not match
+a recognized header, the plugin automatically treats it as a waypoint system.
+
+### Proximity route
+
+The file contains coordinates for each system.  The plugin automatically
+targets the closest available system from your current location.
+
+If coordinate parsing fails, the plugin fallsback to treating it as a
+sequential route.
+
+```csv
+System name,x,y,z
+Sol,0,0,0
+Alpha Centauri,3.03125,-0.09375,3.15625
+```
+
+### Sequential route
+
+The first field must contain the system name. Any other fields are ignored.
+The plugin expects you to travel through these waypoint systems in sequential
+order.
 
 ```csv
 System Name
@@ -27,14 +62,3 @@ Lave,Lavian Brandy,for in the mug
 #Go back home
 Sol
 ```
-
-Load the route file using the 'Open'-button.
-
-When a route is loaded, the label of the 'Open'-button changes to the
-remaining systems in the list.  If you double-click this number the route is
-cleared.
-
-The plugin expects you to go through the waypoint systems in order.  When the
-plugin gets journal events that indicate you have reached the waypoint system,
-it automatically selects the next waypoint system. It also copies to the
-system to the clipboard for easy pasting in the Galaxy Map search bar.
