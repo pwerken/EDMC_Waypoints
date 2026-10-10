@@ -79,7 +79,7 @@ class Waypoints:
             return False
         try:
             self.clear(remove_save=False)
-            xyz = False
+            xyz = True
             self._logger.info('readfile=%s', filename)
             with open(filename, 'r', encoding='utf8') as f:
                 for line in f:
